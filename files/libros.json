@@ -1,0 +1,52 @@
+[
+	{
+		"isbn": 12345678912,
+		"nombre_autor": "pepe juarez",
+		"nombre_libro": "principito",
+		"cantidad": 2,
+		"fila": 5,
+		"columna": 10,
+		"paginas": 185,
+		"categoria": "Fantasia"
+	},
+	{
+		"isbn": 987654321123,
+		"nombre_autor": "juan perez",
+		"nombre_libro": "libro 1",
+		"cantidad": 7,
+		"fila": 9,
+		"columna": 1,
+		"paginas": 215,
+		"categoria": "Thriller"
+	},
+	{
+		"isbn": 147258369852,
+		"nombre_autor": "Luis lopez",
+		"nombre_libro": "libro 2",
+		"cantidad": 5,
+		"fila": 6,
+		"columna": 2,
+		"paginas": 191,
+		"categoria": "Fantasia"
+	},
+	{
+		"isbn": 4134759654,
+		"nombre_autor": "Pepe Mujica",
+		"nombre_libro": "Frijol, la novela erotica",
+		"cantidad": 7,
+		"fila": 6,
+		"columna": 3,
+		"paginas": 40,
+		"categoria": "Fantasia"
+	},
+	{
+		"isbn": 12345678912,
+		"nombre_autor": "Batman",
+		"nombre_libro": "Superman",
+		"cantidad": 3,
+		"fila": 1,
+		"columna": 4,
+		"paginas": 30,
+		"categoria": "Fantasia"
+	}
+]

@@ -1,0 +1,21 @@
+#log-in{
+    display: flex;
+    justify-content: end;
+}
+
+#user-controls, #admin{
+    display: none;
+}
+
+#fantasy .col{
+    border: solid black 1px;
+    max-width: 5px;
+    height: 25px;
+}
+
+#info-fantasy .book{
+    border: solid black 1px;
+    background-color: green;
+    width: 100px;
+    height: 30px;
+}
