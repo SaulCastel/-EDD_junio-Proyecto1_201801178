@@ -38,4 +38,49 @@ export default class Graph{
         string += `\t${node.id} -> ${node.id}_books;\n}`;
         return string;
     }
+    graphMatrix(matrix){
+        let string = 'digraph G{\nnode[shape=box];\n';
+        string += 'ranksep = .5;\nnodesep = .5;\n';
+        string += 'subgraph cluster{\n';
+        string +=  
+        `label="Thriller";\n
+        fontsize=15;\n
+        edge[dir="both"];\n`;
+        //graficar columnas
+        string +='{\nrank=same;\nroot[label=""];\n';
+        let col = matrix.horizontal.head;
+        string += `root -> col_${col.data};\n`;
+        while(col !== null){
+            string += `col_${col.data}[label="${col.data}",group=${col.data}];\n`;
+            if(col !== matrix.horizontal.end){
+                string += `col_${col.data} -> col_${col.next.data};\n`;
+            }
+            col = col.next;
+        }
+        string += '}\n';
+        //graficar filas
+        let row = matrix.vertical.head;
+        while(row !== null){
+            string += '{\nrank=same;\n';
+            string += `row_${row.data}[label="${row.data}",group=0];\n`;
+            col = row.right;
+            let nodeID = `node_${row.data}${col.data.col}`;
+            string += `row_${row.data} -> ${nodeID};\n`;
+            while(col !== null){
+                nodeID = `node_${row.data}${col.data.col}`;
+                string += `${nodeID}[label="${col.toString()}",group=${col.data.col}];\n`;
+                if (col.right !== null){
+                    string +=  `${nodeID} -> node_${row.data}${col.right.data};\n`;
+                }
+                col = col.right;
+            }
+            if(row !== matrix.vertical.end){
+                string += `row_${row.data} -> row_${row.next.data};\n`;
+            }
+            row = row.next;
+            string += '}\n';
+        }
+        string += '}\n}';
+        console.log(string);
+    }
 }

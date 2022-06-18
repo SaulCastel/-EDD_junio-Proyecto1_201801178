@@ -27,6 +27,7 @@ const datos_admin = {
 };
 const admin = new User(datos_admin); users.add(admin);
 const ui = new UI();
+const g = new Graph();
 
 // FUNCIONES
 function login(arr, user, pass) {
@@ -79,7 +80,6 @@ document.getElementById('load-users')
             f.forEach(user => {
                 users.add(new User(user));
             });
-            let g = new Graph();
             g.graphCircularList(users);
         };
         fr.readAsText(this.files[0]);
@@ -100,8 +100,7 @@ document.getElementById('load-books')
                     thriller.set(y,x,new Book(book));
                 }
             });
-            console.log("Thriller:");
-            console.log(thriller);
+            g.graphMatrix(thriller);
             ui.fillFantasyLibrary(fantasy);
             ui.fillThrillerLibrary(thriller);
         };

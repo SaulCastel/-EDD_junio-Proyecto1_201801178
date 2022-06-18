@@ -7,6 +7,11 @@ class _Node{
         this.right = null;
         this.next = null;
         this.prev = null;
+        this.id = null;
+    }
+
+    toString(){
+        return `${this.data.nombre}`;
     }
 }
 
@@ -107,8 +112,11 @@ export default class DisperseMatriz{
     }
     _first_case(data,row,col){
         let pos_y = this.vertical.add(row);
+        pos_y.id = `row_${row}`;
         let pos_x = this.horizontal.add(col);
+        pos_x.id = `col_${col}`;
         let node = new _Node(data);
+        node.id = `node_${row}${col}`;
         pos_y.right = node;
         node.left = pos_y;
         pos_x.dwn = node;
@@ -116,20 +124,25 @@ export default class DisperseMatriz{
     }
     _second_case(data,row,col){
         let pos_x = this.horizontal.add(col);
+        pos_x.id = `col_${col}`;
         let node = new _Node(data);
+        node.id = `node_${row}${col}`;
         pos_x.dwn = node;
         node.up = pos_x;
         this._insertRow(node,row);
     }
     _third_case(data,row,col){
         let pos_y = this.vertical.add(row);
+        pos_y.id = `row_${row}`;
         let node = new _Node(data);
+        node.id = `node_${row}${col}`;
         pos_y.right = node;
         node.left = pos_y;
         this._insertCol(node,col);
     }
     _fourth_case(data,row,col){
         let node = new _Node(data);
+        node.id = `node_${row}${col}`;
         this._insertRow(node,row);
         this._insertCol(node,col);
     }
