@@ -1,5 +1,5 @@
 class _Node{
-    constructor(data,next,prev){
+    constructor(data){
         this.data = data;
         this.up = null;
         this.dwn = null;
@@ -10,10 +10,11 @@ class _Node{
     }
 }
 
-class List{
+class _List{
     constructor(){
         this.head = null;
         this.end = null;
+        this.len = 0;
     }
 
     search(data){
@@ -25,23 +26,37 @@ class List{
         else{
             temp = temp.next;
         }}
+        return null;
     }
 
-    ordenar(node){
+    add(data){
+        let node = new _Node(data);
+        if (this.head === null){
+            this.head = node;
+            this.end = node;
+        }
+        else{
+            this._orderedInsert(node);
+        }
+        this.len += 1;
+        return node;
+    }
+
+    _orderedInsert(node){
         let aux = this.head;
         while(aux != null){
             if(aux.data < node.data){
                 aux = aux.next;
             }
             else{
-                if(aux == this.head){
+                if(aux === this.head){
                     node.next = aux;
                     aux.prev = node;
                     this.head = node;
                 }
                 else{
-                    node.prev = aux.prev;
                     aux.prev.next = node;
+                    node.prev = aux.prev;
                     node.next = aux;
                     aux.prev = node;
                 }
@@ -52,42 +67,120 @@ class List{
         node.prev = this.end;
         this.end = node;
     }
-
-    add(data){
-        let node = new _Node()
-    }
 }
 
-class DisperseMatriz{
+export default class DisperseMatriz{
     constructor(){
-        this.horizontal = new List();
-        this.vertical = new List();
+        this.horizontal = new _List();
+        this.vertical = new _List();
     }
-
-    insert(data,x,y){
-        let x_node = this.horizontal.search(x);
-        let y_node = this.vertical.search(y);
+    get(row,col){
+        let pos_y = this.vertical.head;
+        for (let i = 1; i < row; i++) {
+            pos_y = pos_y.next;
+        }
+        let node = pos_y.right;
+        for (let i = 1; i < col; i++) {
+            node = node.right;
+        }
+        return node.data;
+    }
+    set(row, col, data){
+        let y_node = this.vertical.search(row);
+        let x_node = this.horizontal.search(col);
         //No existen las cabeceras
         if (!x_node && !y_node){
-            this._first_case(data,x,y);
+            this._first_case(data,row,col);
         }
         //Existe en vertical
         else if (!x_node && y_node){
-            this._second_case(data,x,y);
+            this._second_case(data,y_node,col);
         }
         //Existe en horizontal
         else if(x_node && !y_node){
-            this._third_case(data,x,y);
+            this._third_case(data,row,x_node);
         }
         //Existen las cabeceras
         else{
-            this._fourth_case(data,x,y);
+            this._fourth_case(data,y_node,x_node);
         }
     }
-    _first_case(data,x,y){
-        var pos_x = new Node(x);
+    _first_case(data,row,col){
+        let pos_y = this.vertical.add(row);
+        let pos_x = this.horizontal.add(col);
+        let node = new _Node(data);
+        pos_y.right = node;
+        node.left = pos_y;
+        pos_x.dwn = node;
+        node.up = pos_x;
     }
-    _second_case(data,x,y){}
-    _third_case(data,x,y){}
-    _fourth_case(data,x,y){}
+    _second_case(data,row,col){
+        let pos_x = this.horizontal.add(col);
+        let node = new _Node(data);
+        pos_x.dwn = node;
+        node.up = pos_x;
+        this._insertRow(node,row);
+    }
+    _third_case(data,row,col){
+        let pos_y = this.vertical.add(row);
+        let node = new _Node(data);
+        pos_y.right = node;
+        node.left = pos_y;
+        this._insertCol(node,col);
+    }
+    _fourth_case(data,row,col){
+        let node = new _Node(data);
+        this._insertRow(node,row);
+        this._insertCol(node,col);
+    }
+    _insertRow(node,row){
+        let aux = row.right;
+        while(aux.right != null){
+            if(aux.data.row < node.data.row){
+                aux = aux.right;
+            }
+            else{
+                if(aux === row.right){
+                    node.right = aux;
+                    node.left = row;
+                    aux.left = node;
+                    row.right = node;
+                }
+                else{
+                    aux.left.right = node;
+                    node.left = aux.left;
+                    node.right = aux;
+                    aux.left = node;
+                }
+                return;
+            }
+        }
+        aux.right = node;
+        node.left = aux;
+    }
+    _insertCol(node,col){
+        let aux = col.dwn;
+        while(aux.dwn != null){
+            if(aux.data.col < node.data.col){
+                aux = aux.dwn;
+            }
+            else{
+                if(aux === col.dwn){
+                    node.dwn = aux;
+                    node.up = col;
+                    aux.up = node;
+                    col.dwn = node;
+                }
+                else{
+                    aux.up.dwn = node;
+                    node.up = aux.up;
+                    node.dwn = aux;
+                    aux.up = node;
+                }
+                return;
+            }
+        }
+        aux.dwn = node;
+        node.up = aux;
+    }
 }

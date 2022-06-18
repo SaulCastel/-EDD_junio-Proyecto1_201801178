@@ -1,6 +1,7 @@
 import CircularList from './data_structs/circ_list.js';
 import OrtogonalList from './data_structs/ortogonal_list.js';
 import LinkedList from './data_structs/linked_list.js';
+import DisperseMatriz from './data_structs/disperse_matrix.js';
 import User from './classes/User.js'
 import Book from './classes/Book.js';
 import UI from './classes/UI.js'
@@ -10,6 +11,7 @@ import Graph from './classes/graph.js';
 let users = new CircularList();
 let books = new LinkedList();
 let fantasy = new OrtogonalList();
+let thriller = new DisperseMatriz();
 let curr_user = null;
 let curr_book = null;
 
@@ -50,8 +52,8 @@ function login(arr, user, pass) {
     }
     alert('Usuario no existe')
 }
-function addBook(library,x,y,book) {
-    library.set(x,y,book);
+function updateTopUsers(){
+
 }
 
 //EVENTOS
@@ -87,7 +89,6 @@ document.getElementById('load-books')
         let fr = new FileReader();
         fr.onload = function () {
             let f = JSON.parse(fr.result);
-            let index = 0;
             f.forEach(book => {
                 books.add(new Book(book));
                 let x = book.columna;
@@ -95,21 +96,26 @@ document.getElementById('load-books')
                 if(book.categoria === 'Fantasia'){
                     fantasy.set(y,x,new Book(book));
                 }
-                index += 1;
+                else{
+                    thriller.set(y,x,new Book(book));
+                }
             });
+            console.log("Thriller:");
+            console.log(thriller);
             ui.fillFantasyLibrary(fantasy);
+            ui.fillThrillerLibrary(thriller);
         };
         fr.readAsText(this.files[0]);
     });
 //LIBRERAS
 document.getElementById('fantasy')
     .addEventListener('click', function(e){
-        let cell = e.target
+        let cell = e.target;
         let row = cell.getAttribute('row');
         let col = cell.getAttribute('col');
         if(row !== null && col !== null){
             curr_book = fantasy.get(row,col);
-            ui.showBookInfo(curr_book,'info-fantasy');
+            ui.showBookInfo(curr_book,'fantasy');
         }
     });
 document.getElementById('info-fantasy')
@@ -120,10 +126,35 @@ document.getElementById('info-fantasy')
                 const num = document.getElementById('fantasy-num').value;
                 curr_user.addBook(curr_book,num);
                 curr_book.num -= num;
-                ui.showBookInfo(curr_book,'info-fantasy');
+                ui.showBookInfo(curr_book,'fantasy');
             }
             else{
                 alert('Inicie sesion');
             }
         }
     });
+document.getElementById('thriller')
+    .addEventListener('click', function(e){
+        let cell = e.target;
+        let row = cell.getAttribute('row');
+        let col = cell.getAttribute('col');
+        if(row !== null && col !== null){
+            curr_book = thriller.get(row,col);
+            ui.showBookInfo(curr_book,'thriller');
+        }
+    });
+document.getElementById('info-thriller')
+.addEventListener('click', function(e){
+    const element = e.target;
+    if(element.getAttribute('id') === 'buy-thriller'){
+        if(curr_user){
+            const num = document.getElementById('thriller-num').value;
+            curr_user.addBook(curr_book,num);
+            curr_book.num -= num;
+            ui.showBookInfo(curr_book,'thriller');
+        }
+        else{
+            alert('Inicie sesion');
+        }
+    }
+});

@@ -23,17 +23,10 @@ export default class UI{
     showUserView(user){
         this._showUserControls(user);
     }
-    _addBookToLibrary(category,book){
-        const library = document.getElementById(`${category}`);
-        const element = document.createElement('div');
-        element.className = 'card'; element.style.width = '15rem';
-        element.innerHTML = html`
-            <div class=""></div>
-            `;
-        library.appendChild(element);
-    }
+
     fillFantasyLibrary(library){
         let lib = document.getElementById('fantasy');
+        lib.innerHTML = '';
         let row = library.header.head;
         for (let i = 1; i <= 25; i++) {
             let row_div = document.createElement('div');
@@ -54,15 +47,42 @@ export default class UI{
             row = row.next;
         }
     }
+
+    fillThrillerLibrary(library){
+        let lib = document.getElementById('thriller');
+        lib.innerHTML = '';
+        let row = library.vertical.head;
+        for (let i = 1; i <= library.vertical.len; i++) {
+            let row_div = document.createElement('div');
+            row_div.className = 'row';
+            let aux = row.right;
+            let j = 0;
+            while (aux != null) {
+                let col = document.createElement('div');
+                col.className = 'col btn';
+                col.setAttribute('row',i);
+                col.setAttribute('col',j);
+                j++;
+                if(aux.data != null){
+                    col.className = 'col btn btn-info';
+                }
+                row_div.appendChild(col);
+                aux = aux.right;
+            }
+            lib.appendChild(row_div);
+            row = row.next;
+        }
+    }
+
     showBookInfo(book,where){
         if(book){
-            let info = document.getElementById(where);
+            let info = document.getElementById(`info-${where}`);
             info.innerHTML = `
                 <h5>${book.nombre}</h5>
                 <p>Autor: ${book.autor}</p>
                 <p>isbn: ${book.isbn}</p>
-                <input type="number" id="fantasy-num" min="1" value="1">
-                <div class="btn btn-primary my-3" id="buy-fantasy">Comprar</div>
+                <input type="number" id="${where}-num" min="1" value="1">
+                <div class="btn btn-primary my-3" id="buy-${where}">Comprar</div>
                 <h5>Disponibles:</h5>
             `;
             for (let i = 0; i < book.num; i++) {

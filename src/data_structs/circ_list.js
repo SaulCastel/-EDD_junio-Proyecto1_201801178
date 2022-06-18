@@ -18,13 +18,15 @@ export default class CircularList{
         let id = `n${this.id}`
         let temp = new Node(id, data);
         if (this.head === null) {
-            this.head = temp
-            this.end = temp
+            this.head = temp;
+            this.end = temp;
+            this.head.next = temp;
+            this.end.next = temp;
         }
         else {
-            this.end.next = temp
-            this.end = temp
-            temp.next = this.head
+            this.end.next = temp;
+            this.end = temp;
+            temp.next = this.head;
         }
         this.len += 1;
         this.id += 1;

@@ -11,14 +11,12 @@ export default class Graph{
         }
         aux = list.head;
         string += '{rank=same\n'
-        for (let i = 0; i < list.len-1; i++) {
+        for (let i = 0; i < list.len; i++) {
             string += `\t${aux.id}->${aux.next.id}\n`;
             aux = aux.next;
         }
-        string += `\t${list.end.id}->${list.head.id}}\n}`
-        //console.log(string);
+        string += '}\n}';
         //render
-        console.log(string);
         d3.select("#canva-users-list")
         .graphviz()
         .width(1000)
