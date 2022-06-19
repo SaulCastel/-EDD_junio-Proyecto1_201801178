@@ -19,8 +19,7 @@ export default class Graph{
         //render
         d3.select("#canva-users-list")
         .graphviz()
-        .width(1000)
-        .height(500)
+        .width(1200)
         .renderDot(string);
     }
     _genSubList(node){
@@ -38,49 +37,97 @@ export default class Graph{
         string += `\t${node.id} -> ${node.id}_books;\n}`;
         return string;
     }
-    graphMatrix(matrix){
+    graphFantasy(matrix){
+        let string = 'digraph G{\nnode[shape=box,style=filled];\n';
+        string += 'label="Fantasy";\nnodesep = 1;\n';
+        let row = matrix.header.head;
+        for (let i = 1; i <= 25; i++) {
+            let col = row.data.head;
+            if(row.next != null){
+                string += `row${i}_${col.id} -> row${i+1}_${row.next.data.head.id}\n`;
+            }
+            string += `subgraph cluster${i}{\nlabel="";\n`;
+            string += '{\nrank=same;\n';
+            for (let j = 1; j <= 25; j++) {
+                if(col.data != null){
+                    string += `row${i}_${col.id}[label="${col.data.nombre}",fillcolor="skyblue"];\n`;
+                }
+                else{
+                    string += `row${i}_${col.id}[label="Vacio"];\n`;
+                }
+                if(col.next !== null){
+                    string += `row${i}_${col.id} -> row${i}_${col.next.id};\n`;
+                }
+                col = col.next;
+            }
+            string += '}\n}\n';
+            row = row.next;
+        }
+        string += '}';
+        //render
+        d3.select("#canva-fantasy")
+        .graphviz()
+        .width(1200)
+        .renderDot(string);
+    }
+    graphThriller(matrix){
         let string = 'digraph G{\nnode[shape=box];\n';
-        string += 'ranksep = .5;\nnodesep = .5;\n';
+        string += 'ranksep = 1;\nnodesep = 1;\n';
         string += 'subgraph cluster{\n';
-        string +=  
-        `label="Thriller";\n
-        fontsize=15;\n
-        edge[dir="both"];\n`;
+        string += `label="Thriller";\nfontsize=15;\nedge[dir="both"];\n`;
         //graficar columnas
-        string +='{\nrank=same;\nroot[label=""];\n';
         let col = matrix.horizontal.head;
-        string += `root -> col_${col.data};\n`;
+        string +='{\nrank=same;\nroot[label=""];\n';
+        string += `root -> ${col.id};\n`;
         while(col !== null){
-            string += `col_${col.data}[label="${col.data}",group=${col.data}];\n`;
+            string += `${col.id}[label="${col.data}",group=${col.data}];\n`;
             if(col !== matrix.horizontal.end){
-                string += `col_${col.data} -> col_${col.next.data};\n`;
+                string += `${col.id} -> ${col.next.id};\n`;
             }
             col = col.next;
         }
         string += '}\n';
+        col = matrix.horizontal.head;
+        while(col !== null){
+            string += `${col.id} -> ${col.dwn.id};\n`;
+            col = col.next;
+        }
         //graficar filas
         let row = matrix.vertical.head;
+        string += `root -> ${row.id};\n`;
         while(row !== null){
             string += '{\nrank=same;\n';
-            string += `row_${row.data}[label="${row.data}",group=0];\n`;
+            string += `${row.id}[label="${row.data}",group=0];\n`;
             col = row.right;
-            let nodeID = `node_${row.data}${col.data.col}`;
-            string += `row_${row.data} -> ${nodeID};\n`;
+            string += `${row.id} -> ${col.id};\n`;
+            //graficar nodos
             while(col !== null){
-                nodeID = `node_${row.data}${col.data.col}`;
-                string += `${nodeID}[label="${col.toString()}",group=${col.data.col}];\n`;
+                string += `${col.id}[label="${col.toString()}",group=${col.data.col}];\n`;
+                //conecciones horizontales de nodos
                 if (col.right !== null){
-                    string +=  `${nodeID} -> node_${row.data}${col.right.data};\n`;
+                    string +=  `${col.id} -> ${col.right.id};\n`;
                 }
                 col = col.right;
             }
+            string += '}\n';
+            //conexiones verticales de nodos
             if(row !== matrix.vertical.end){
-                string += `row_${row.data} -> row_${row.next.data};\n`;
+                string += `${row.id} -> ${row.next.id};\n`;
+            }
+            col = row.right;
+            while(col !== null){
+                if (col.dwn !== null){
+                    string += `${col.id} -> ${col.dwn.id};\n`;
+                }
+                col = col.right;
             }
             row = row.next;
-            string += '}\n';
         }
         string += '}\n}';
-        console.log(string);
+        //render
+        d3.select("#canva-thriller")
+        .graphviz()
+        .width(1200)
+        .renderDot(string);
     }
 }

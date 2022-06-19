@@ -1,6 +1,10 @@
 import Graph from './graph.js';
 
 export default class UI{
+    constructor(){
+        this.g = new Graph();
+    }
+
     _showUserControls(user){
         document.getElementById('log-in').style.display = "none";
         document.getElementById('user-controls').style.display = "block";
@@ -16,8 +20,7 @@ export default class UI{
     showAdminView(user,user_list){
         this._showUserControls(user);
         document.getElementById('admin').style.display = "block";
-        let g = new Graph();
-        g.graphCircularList(user_list);
+        this.g.graphCircularList(user_list);
     }
 
     showUserView(user){
@@ -46,6 +49,7 @@ export default class UI{
             lib.appendChild(row_div);
             row = row.next;
         }
+        this.g.graphFantasy(library);
     }
 
     fillThrillerLibrary(library){
@@ -72,6 +76,7 @@ export default class UI{
             lib.appendChild(row_div);
             row = row.next;
         }
+        this.g.graphThriller(library);
     }
 
     showBookInfo(book,where){

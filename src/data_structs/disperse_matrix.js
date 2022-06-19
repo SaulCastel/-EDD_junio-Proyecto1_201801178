@@ -126,7 +126,7 @@ export default class DisperseMatriz{
         let pos_x = this.horizontal.add(col);
         pos_x.id = `col_${col}`;
         let node = new _Node(data);
-        node.id = `node_${row}${col}`;
+        node.id = `node_${row.data}${col}`;
         pos_x.dwn = node;
         node.up = pos_x;
         this._insertRow(node,row);
@@ -135,21 +135,21 @@ export default class DisperseMatriz{
         let pos_y = this.vertical.add(row);
         pos_y.id = `row_${row}`;
         let node = new _Node(data);
-        node.id = `node_${row}${col}`;
+        node.id = `node_${row}${col.data}`;
         pos_y.right = node;
         node.left = pos_y;
         this._insertCol(node,col);
     }
     _fourth_case(data,row,col){
         let node = new _Node(data);
-        node.id = `node_${row}${col}`;
+        node.id = `node_${row.data}${col.data}`;
         this._insertRow(node,row);
         this._insertCol(node,col);
     }
     _insertRow(node,row){
         let aux = row.right;
-        while(aux.right != null){
-            if(aux.data.row < node.data.row){
+        while(aux != null){
+            if(aux.data.col < node.data.col){
                 aux = aux.right;
             }
             else{
@@ -173,8 +173,8 @@ export default class DisperseMatriz{
     }
     _insertCol(node,col){
         let aux = col.dwn;
-        while(aux.dwn != null){
-            if(aux.data.col < node.data.col){
+        while(aux != null){
+            if(aux.data.row < node.data.row){
                 aux = aux.dwn;
             }
             else{

@@ -100,7 +100,6 @@ document.getElementById('load-books')
                     thriller.set(y,x,new Book(book));
                 }
             });
-            g.graphMatrix(thriller);
             ui.fillFantasyLibrary(fantasy);
             ui.fillThrillerLibrary(thriller);
         };
