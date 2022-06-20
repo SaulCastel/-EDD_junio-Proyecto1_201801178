@@ -3,6 +3,7 @@ import OrtogonalList from './data_structs/ortogonal_list.js';
 import LinkedList from './data_structs/linked_list.js';
 import DisperseMatriz from './data_structs/disperse_matrix.js';
 import BSTree from './data_structs/bstree.js';
+import Queue from './data_structs/cola.js';
 import User from './classes/User.js'
 import Book from './classes/Book.js';
 import Author from './classes/Author.js';
@@ -15,6 +16,7 @@ let books = new LinkedList();
 let authors = new BSTree();
 let fantasy = new OrtogonalList();
 let thriller = new DisperseMatriz();
+let pending = new Queue();
 let curr_user = null;
 let curr_book = null;
 
@@ -59,7 +61,27 @@ function login(arr, user, pass) {
 function updateTopUsers(){
 
 }
-
+function purchase(num){
+    let result = curr_book.num - num;
+    if (result < 0){
+        let data = {
+            'client': curr_user.nombre,
+            'book': curr_book.nombre,
+            'num': Math.abs(result)
+        };
+        pending.insert(data);
+        if(curr_book.num != 0){
+            curr_user.addBook(curr_book,curr_book.num);
+        }
+        curr_book.num = 0;
+    }
+    else{
+        curr_user.addBook(curr_book,num);
+        curr_book.num -= num;
+    }
+    g.graphQueue(pending);
+    g.graphCircularList(users)
+}
 //EVENTOS
 document.getElementById("login-form")
     .addEventListener('submit', function (e) {
@@ -137,8 +159,7 @@ document.getElementById('info-fantasy')
         if(element.getAttribute('id') === 'buy-fantasy'){
             if(curr_user){
                 const num = document.getElementById('fantasy-num').value;
-                curr_user.addBook(curr_book,num);
-                curr_book.num -= num;
+                purchase(num);
                 ui.showBookInfo(curr_book,'fantasy');
             }
             else{

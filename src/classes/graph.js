@@ -171,4 +171,22 @@ export default class Graph{
         string += `${node.id}:f1 -> null${this.nullCount++};\n`;
         return string;
     }
+    graphQueue(queue){
+        let string = 'digraph Q{\nnode[shape=box];\n{rank=same;\n';
+        let aux = queue.head;
+        while(aux != null){
+            let label = `Cliente: ${aux.data.client}\nLibro: ${aux.data.book}\nnum: ${aux.data.num}`
+            string += `${aux.id}[label="${label}"]`;
+            if (aux.prev != null){
+                string += `${aux.id} -> ${aux.prev.id};\n`;
+            }
+            aux = aux.prev;
+        }
+        string += '}\n}';
+        //render
+        d3.select("#canva-queue")
+        .graphviz()
+        .width(1200)
+        .renderDot(string);
+    }
 }
