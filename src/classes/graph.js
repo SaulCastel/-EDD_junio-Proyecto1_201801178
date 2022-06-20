@@ -189,4 +189,23 @@ export default class Graph{
         .width(1200)
         .renderDot(string);
     }
+    graphDoublyLinked(list){
+        let string = 'digraph top{\nnode[shape=box];edge[dir="both"];\n';
+        string += 'nodesep=1;\n{rank=same;\n';
+        let aux = list.head;
+        while(aux != null){
+            let label = `Cliente: ${aux.data.nombre}\nCantidad: ${aux.data.purchases}`
+            string += `${aux.id}[label="${label}"]`;
+            if (aux.next != null){
+                string += `${aux.id} -> ${aux.next.id};\n`;
+            }
+            aux = aux.next;
+        }
+        string += '}\n}';
+        //render
+        d3.select("#canva-top")
+        .graphviz()
+        .width(1200)
+        .renderDot(string);
+    }
 }

@@ -26,7 +26,28 @@ export default class UI{
     showUserView(user){
         this._showUserControls(user);
     }
-
+    showTopUsers(list){
+        let top = document.getElementById('top-users');
+        top.innerHTML = '';
+        let aux = list.head;
+        let i = 1;
+        while(aux != null){
+            let card = document.createElement('div');
+            card.className = 'col-lg-2 mx-4';
+            card.innerHTML = `
+            <div class="card">
+                <div class="card-body">
+                    <h3>Puesto ${i}</h3>
+                    <img class="img-fluid w-25" src="./img/person.png" alt="">
+                    <h4>${aux.data.nombre.replace(' ','<br>')}</h4>
+                    <p>Cantidad libros: ${aux.data.purchases}</p>
+                </div>
+            </div>`;
+            top.appendChild(card);
+            aux = aux.next;
+            i++;
+        }
+    }
     fillFantasyLibrary(library){
         let lib = document.getElementById('fantasy');
         lib.innerHTML = '';

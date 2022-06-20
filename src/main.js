@@ -4,11 +4,13 @@ import LinkedList from './data_structs/linked_list.js';
 import DisperseMatriz from './data_structs/disperse_matrix.js';
 import BSTree from './data_structs/bstree.js';
 import Queue from './data_structs/cola.js';
+import DoublyLinkedList from './data_structs/dob_link.js';
 import User from './classes/User.js'
 import Book from './classes/Book.js';
 import Author from './classes/Author.js';
 import UI from './classes/UI.js'
 import Graph from './classes/graph.js';
+import bubbleSort from './classes/sorting.js';
 
 // ALMACENAMIENTO
 let users = new CircularList();
@@ -17,6 +19,7 @@ let authors = new BSTree();
 let fantasy = new OrtogonalList();
 let thriller = new DisperseMatriz();
 let pending = new Queue();
+let top;
 let curr_user = null;
 let curr_book = null;
 
@@ -59,7 +62,17 @@ function login(arr, user, pass) {
     alert('Usuario no existe')
 }
 function updateTopUsers(){
-
+    users = bubbleSort(users);
+    top = new DoublyLinkedList();
+    let u = users.head;
+    for (let i = 0; i < 5; i++) {
+        if (u.data.purchases != 0){
+            top.add(u.data)
+        }
+        u = u.next;
+    }
+    ui.showTopUsers(top);
+    g.graphDoublyLinked(top);
 }
 function purchase(num){
     let result = curr_book.num - num;
@@ -79,6 +92,7 @@ function purchase(num){
         curr_user.addBook(curr_book,num);
         curr_book.num -= num;
     }
+    updateTopUsers();
     g.graphQueue(pending);
     g.graphCircularList(users)
 }
