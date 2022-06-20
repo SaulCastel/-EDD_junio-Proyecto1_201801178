@@ -25,7 +25,7 @@ class _List{
     search(data){
         let temp = this.head;
         while(temp != null)
-        {if (temp.data === data){
+        {if (temp.data == data){
             return temp;
         }
         else{
@@ -80,15 +80,18 @@ export default class DisperseMatriz{
         this.vertical = new _List();
     }
     get(row,col){
-        let pos_y = this.vertical.head;
-        for (let i = 1; i < row; i++) {
-            pos_y = pos_y.next;
+        let y_node = this.vertical.search(row);
+        let x_node = this.horizontal.search(col);
+        if(y_node && x_node){
+            let node = y_node.right;
+            while(node != null){
+                if (node.data.col == col){
+                    return node.data;
+                }
+                node = node.right;
+            }
         }
-        let node = pos_y.right;
-        for (let i = 1; i < col; i++) {
-            node = node.right;
-        }
-        return node.data;
+        return null;
     }
     set(row, col, data){
         let y_node = this.vertical.search(row);

@@ -183,8 +183,7 @@ document.getElementById('info-thriller')
     if(element.getAttribute('id') === 'buy-thriller'){
         if(curr_user){
             const num = document.getElementById('thriller-num').value;
-            curr_user.addBook(curr_book,num);
-            curr_book.num -= num;
+            purchase(num);
             ui.showBookInfo(curr_book,'thriller');
         }
         else{

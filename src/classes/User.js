@@ -21,7 +21,7 @@ export default class User{
     }
 
     toString(){
-        let string = `USER: ${this.user}\n`;
+        let string = `USER: ${this.user}\n PASS: ${this.pass}`;
         return string;
     }
 

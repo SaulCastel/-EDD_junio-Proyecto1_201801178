@@ -55,26 +55,20 @@ export default class UI{
     fillThrillerLibrary(library){
         let lib = document.getElementById('thriller');
         lib.innerHTML = '';
-        let row = library.vertical.head;
-        for (let i = 1; i <= library.vertical.len; i++) {
+        for (let i = 1; i <= library.vertical.end.data; i++) {
             let row_div = document.createElement('div');
             row_div.className = 'row';
-            let aux = row.right;
-            let j = 0;
-            while (aux != null) {
+            for (let j = 1; j <= library.horizontal.end.data; j++) {
                 let col = document.createElement('div');
-                col.className = 'col btn';
                 col.setAttribute('row',i);
                 col.setAttribute('col',j);
-                j++;
-                if(aux.data != null){
+                col.className = 'col';
+                if(library.get(i,j)){
                     col.className = 'col btn btn-info';
                 }
                 row_div.appendChild(col);
-                aux = aux.right;
             }
             lib.appendChild(row_div);
-            row = row.next;
         }
         this.g.graphThriller(library);
     }
@@ -82,13 +76,15 @@ export default class UI{
     showBookInfo(book,where){
         if(book){
             let info = document.getElementById(`info-${where}`);
-            info.innerHTML = `
+            info.innerHTML = 
+            `
                 <h5>${book.nombre}</h5>
                 <p>Autor: ${book.autor}</p>
                 <p>isbn: ${book.isbn}</p>
+                <p>fila: ${book.row}, col: ${book.col}</p>
                 <input type="number" id="${where}-num" min="1" value="1">
                 <div class="btn btn-primary my-3" id="buy-${where}">Comprar</div>
-                <h5>Disponibles:</h5>
+                <h5>Disponibles(${book.num}):</h5>
             `;
             for (let i = 0; i < book.num; i++) {
                 let b = document.createElement('div');
