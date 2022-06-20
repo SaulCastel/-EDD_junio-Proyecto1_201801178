@@ -2,14 +2,17 @@ import CircularList from './data_structs/circ_list.js';
 import OrtogonalList from './data_structs/ortogonal_list.js';
 import LinkedList from './data_structs/linked_list.js';
 import DisperseMatriz from './data_structs/disperse_matrix.js';
+import BSTree from './data_structs/bstree.js';
 import User from './classes/User.js'
 import Book from './classes/Book.js';
+import Author from './classes/Author.js';
 import UI from './classes/UI.js'
 import Graph from './classes/graph.js';
 
 // ALMACENAMIENTO
 let users = new CircularList();
 let books = new LinkedList();
+let authors = new BSTree();
 let fantasy = new OrtogonalList();
 let thriller = new DisperseMatriz();
 let curr_user = null;
@@ -102,6 +105,18 @@ document.getElementById('load-books')
             });
             ui.fillFantasyLibrary(fantasy);
             ui.fillThrillerLibrary(thriller);
+        };
+        fr.readAsText(this.files[0]);
+    });
+document.getElementById('load-authors')
+    .addEventListener('change', function(){
+        let fr = new FileReader();
+        fr.onload = function (){
+            let f = JSON.parse(fr.result);
+            f.forEach(author => {
+                authors.insert(new Author(author));
+            });
+            g.graphBStree(authors);
         };
         fr.readAsText(this.files[0]);
     });

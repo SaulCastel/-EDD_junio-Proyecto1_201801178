@@ -1,4 +1,7 @@
-export default class Graph{    
+export default class Graph{  
+    constructor(){
+        this.nullCount = 0;
+    }  
     graphCircularList(list){
         let string = 'digraph G{node[shape="box"]\n';
         let aux = list.head;
@@ -129,5 +132,43 @@ export default class Graph{
         .graphviz()
         .width(1200)
         .renderDot(string);
+    }
+    graphBStree(tree){
+        let string = 'digraph BST{\nnode[shape=record]';
+        string += this._graphNode(tree.root);
+        string += '}';
+        //render
+        d3.select("#canva-authors")
+        .graphviz()
+        .width(1200)
+        .renderDot(string);
+    }
+    _graphNode(node){
+        let string = `${node.id}[label="<f0>|${node.key.name}|<f1>"];\n`;
+        if (node.left){
+            string += `${node.id}:f0 -> ${node.left.id};\n`;
+            string += this._graphNode(node.left);
+        }
+        else{
+            string += this._graphNullLeft(node);
+        }
+        if(node.right){
+            string += `${node.id}:f1 -> ${node.right.id};\n`;
+            string += this._graphNode(node.right);
+        }
+        else{
+            string += this._graphNullRight(node);
+        }
+        return string;
+    }
+    _graphNullLeft(node){
+        let string = `null${this.nullCount}[shape=point];\n`;
+        string += `${node.id}:f0 -> null${this.nullCount++};\n`;
+        return string;
+    }
+    _graphNullRight(node){
+        let string = `null${this.nullCount}[shape=point];\n`;
+        string += `${node.id}:f1 -> null${this.nullCount++};\n`;
+        return string;
     }
 }
